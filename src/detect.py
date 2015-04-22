@@ -45,7 +45,6 @@ def pix_norm(mtx, pixel):
     a2 = py_ang(n2,z)
     return (a1+a2)/2
 
-
     
 def lel():
     return [[[x, y] for x in range(1,498,1)] for y in range(1,498,1)]
