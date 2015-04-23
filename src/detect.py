@@ -35,7 +35,7 @@ def pix_norm(mtx, pixel):
     origin = np.array ([x_scl,y_scl,mtx[x,y]])
     v1, v3, v2, v4 = [nbr - origin for nbr in neighbors]
     n1 = np.cross(v1,v2)
-    print n1
+    print(n1)
     n2 = np.cross(v3,v4)
 
     z = [0,0,1]
