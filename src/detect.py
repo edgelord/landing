@@ -1,12 +1,10 @@
 #!/usr/bin/python
 import numpy as np
 import numpy.linalg as la
+import math
 
-rsc = "../resources/"
-s1 = rsc + "surface1.dem"
-s2 = rsc + "surface2.dem"
-
-p = 1
+resource_dir = "../resources/"
+data = resource_dir+"dem.dat"
 
 # todo figure out norms relative to flat plane
 def load_file(file_name):
