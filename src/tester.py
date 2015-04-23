@@ -1,4 +1,5 @@
 import PIL
+import numpy as np
 
 #landing prediction algorithm
 import core
@@ -17,10 +18,11 @@ def main():
 
     for example_num in range(len(examples)):
         
-        prediction_matrix = core.main(examples[example_num] + "_500by500.ply")
+        prediction_matrix = None #core.main(examples[example_num] + "_500by500.ply")
         
         solution_path = examples[example_num] + ".invHazard.pgm"
-        solution = PIL.open(solution_path);
+        print(solution_path)
+        solution = load_pgm_file(solution_path.replace("/", "\\"));
         
         correct = 0;
         total = size * size;
@@ -31,6 +33,14 @@ def main():
                     correct = correct + 1
                     
         print("The prediction accuracy is "+correct/float(total)+"%")
+        
+def load_pgm_file(file_name):
+    with open(file_name, 'r') as infile:
+        header = infile.readline()
+        #width, height, maxval = [int(item) for item in header.split()[1:]]
+        print(np.fromfile(infile, dtype=np.uint16).shape)
+        solution = np.fromfile(infile, dtype=np.uint16).reshape((500, 500))  
+        return solution
     
 if __name__ == "__main__":
     main()
