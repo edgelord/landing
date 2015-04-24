@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import numpy as np
 import numpy.linalg as la
-import math
+import matplotlib.pyplot as plt
+import math 
 
 resource_dir = "../resources/"
 data = resource_dir+"dem.dat"
@@ -9,12 +10,13 @@ data = resource_dir+"dem.dat"
 # todo figure out norms relative to flat plane
 def load_file(file_name):
     with open(file_name, "rb") as f:
-        arrayName = np.fromfile(f, np.float32)
-        arrayName.byteswap(True)
-        return np.array(np.split(arrayName,500))
+        array = np.fromfile(f, np.float32)
+        array.byteswap(True)
+        return np.reshape(array,(500,500))
 
-
-surf = load_file("../resources/surface2.dem")
+surf = load_file("../resources/surface1.dem")
+surf2 = load_file(resource_dir + 
+surf4 = load_file("../resources/surface2.dem")
 
 def py_ang(v1, v2):
     """ Returns the angle in radians between vectors 'v1' and 'v2'    """
@@ -43,6 +45,33 @@ def pix_norm(mtx, pixel):
     a2 = py_ang(n2,z)
     return (a1+a2)/2
 
-    
+def safe_slope_mtx(surf_mtx):
+    # The max derivative that is within a 10 degree incline
+    max_d = 0.1763269807
+
+    rows, cols = surf_mtx.shape
+    max_mtx = [[max_d for _ in range(rows)] for _ in range(cols)]
+    map_scl = [[.1 for _ in range(rows)] for _ in range(cols)]
+
+    gx, gy = np.gradient(surf_mtx, map_scl, map_scl)
+
+    x_safe = np.less(gx, max_mtx)
+    y_safe = np.less(gy, max_mtx)
+    safe_pts = np.logical_and(x_safe, y_safe)
+
+    return safe_pts
+
+def safe_to_pval(safe):
+    if safe:
+        return 255
+    else: return 0
+
+
 def lel():
     return [[[x, y] for x in range(1,498,1)] for y in range(1,498,1)]
+
+M = [[1, 2, 3, 4],
+     [2, 3, 4, 5],
+     [4 ,6 , 8,10],
+     [11,12,13,15],
+     [7, 7, 7,  7]]

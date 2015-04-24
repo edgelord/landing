@@ -120,7 +120,14 @@ def get_angle(v1, v2):
             return np.pi
     return angle
     
-if __name__ == "__main__": 
+def load_dem(file_name):
+    with open(file_name, "rb") as f:
+        array = np.fromfile(f, np.float32)
+        array.byteswap(True)
+        return np.reshape(array,(500,500))
+
+def main():
+    # grid = load_dem("../resources/surface2.dem")
     grid = np.random.rand(500, 500)*2
     positions = list()
     for x in np.arange(8.5, grid.shape[0]-8.5-1, step):
@@ -128,3 +135,6 @@ if __name__ == "__main__":
             positions.append((x,y))
         
     get_safe_angle_positions(positions, grid)
+    
+if __name__ == "__main__": 
+    main()
