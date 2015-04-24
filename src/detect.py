@@ -49,8 +49,8 @@ def safe_slope_mtx(surf_mtx):
     max_d = 0.1763269807
 
     rows, cols = surf_mtx.shape
-    max_mtx = [[max_d for _ in range(rows)] for _ in range(cols)]
-    map_scl = [[.1 for _ in range(rows)] for _ in range(cols)]
+    max_mtx = [[max_d for _ in xrange(rows)] for _ in xrange(cols)]
+    map_scl = [[.1 for _ in xrange(rows)] for _ in xrange(cols)]
 
     gx, gy = np.gradient(surf_mtx, map_scl, map_scl)
 
@@ -60,11 +60,16 @@ def safe_slope_mtx(surf_mtx):
 
     return safe_pts
 
+
 def safe_to_pval(safe):
     if safe:
-        return 255
-    else: return 0
+        return 0
+    else: return 255
 
+def output_pgm(safe_mtx):
+    pfunc = np.vectorize(safe_to_pval)
+    return pfunc(safe_mtx)
+    
 
 def lel():
     return [[[x, y] for x in range(1,498,1)] for y in range(1,498,1)]
@@ -74,3 +79,6 @@ M = [[1, 2, 3, 4],
      [4 ,6 , 8,10],
      [11,12,13,15],
      [7, 7, 7,  7]]
+
+
+T = np.array([[_*2 for _ in range(50)] for _ in range(50)])
