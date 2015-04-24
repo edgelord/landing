@@ -2,17 +2,54 @@
 """
 Created on Wed Apr 22 17:09:40 2015
 
-@author: Jordan
+@author: luber2
 """
 import numpy as np
 import math
+import weak_elimination
+import detect
+import platform
 
 step = 1
 r = 7.25
-max_ang_level = 5
+max_ang_level = 4
+
+resource_dir = "../resources/"
+data = resource_dir+"dem.dat"
+
+def main(filename):
+    print(filename)
+    print(platform.system())
+    if platform.system() == "Windows":
+        filename.replace("/", "\\")
+    grid = detect.load_file(filename)
+    print(grid)
+    pos_grid = get_pos_grid(grid)
+    #pos_grid = weak_elimination.lv1_elimination(grid, pos_grid)
+    
+    valid_pos, norms = get_safe_angle_positions_and_norms(get_pos_from_pos_grid(pos_grid), grid)
+    
+    result_grid = np.zeros(grid.shape[0], grid.shape[1])
+    for p in valid_pos:
+        for x in range(math.floor(p[0]-8.5), math.ceil(p[0]+8.5)):
+            for y in range(math.floor(p[1]-8.5), math.ceil(p[1]+8.5)):
+                result_grid[x][y] = 255
+                
+    return result_grid
+        
+def get_pos_grid(grid):
+    pos_grid = np.ones((grid.shape[0]-17)/step, (grid.shape[1]-17)/step)
+    return pos_grid
+    
+    
+def get_pos_from_pos_grid(grid):    
+    positions = list()
+    for x in np.arange(8.5, grid.shape[0]-8.5-1, step):
+        for y in np.arange(8.5, grid.shape[1]-8.5-1, step):
+            positions.append((x,y))
 
 
-def get_safe_angle_positions(positions, grid):    
+def get_safe_angle_positions_and_norms(positions, grid):    
     valid_pos = list()
     valid_norms = list()
     for pos in positions:
@@ -134,7 +171,11 @@ def main():
         for y in np.arange(8.5, grid.shape[1]-8.5-1, step):
             positions.append((x,y))
         
+<<<<<<< HEAD
     get_safe_angle_positions(positions, grid)
     
 if __name__ == "__main__": 
     main()
+=======
+    get_safe_angle_positions_and_norms(positions, grid)
+>>>>>>> 9406d8eb6d43939b8b92fa8858fd6a629ee3cda4
