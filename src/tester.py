@@ -18,7 +18,7 @@ def main():
 
     for example_num in range(len(examples)):
         
-        prediction_matrix = None #core.main(examples[example_num] + "_500by500.ply")
+        prediction_matrix = core.main(examples[example_num] + "_500by500.ply")
         
         solution_path = examples[example_num] + ".invHazard.pgm"
         print(solution_path)

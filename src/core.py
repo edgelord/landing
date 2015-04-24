@@ -7,6 +7,8 @@ Created on Wed Apr 22 17:09:40 2015
 import numpy as np
 import math
 import weak_elimination
+import detect
+import platform
 
 step = 1
 r = 7.25
@@ -17,7 +19,10 @@ data = resource_dir+"dem.dat"
 
 def main(filename):
     print(filename)
-    grid = load_file(filename.replace("/", "\\"))
+    print(platform.system())
+    if platform.system() == "Windows":
+        filename.replace("/", "\\")
+    grid = detect.load_file(filename)
     print(grid)
     pos_grid = get_pos_grid(grid)
     #pos_grid = weak_elimination.lv1_elimination(grid, pos_grid)
@@ -31,14 +36,6 @@ def main(filename):
                 result_grid[x][y] = 255
                 
     return result_grid
-    
-def load_file(file_name):
-    print(file_name)
-    with open(file_name, 'r') as infile:
-        header = infile.readline()
-        width, height, maxval = [int(item) for item in header.split()[1:]]
-        grid = np.fromfile(infile, dtype=np.uint16).reshape((height, width))  
-        return grid
         
 def get_pos_grid(grid):
     pos_grid = np.ones((grid.shape[0]-17)/step, (grid.shape[1]-17)/step)
